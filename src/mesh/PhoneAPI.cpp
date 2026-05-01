@@ -475,6 +475,11 @@ size_t PhoneAPI::getFromRadio(uint8_t *buf)
             fromRadioScratch.moduleConfig.which_payload_variant = meshtastic_ModuleConfig_tak_tag;
             fromRadioScratch.moduleConfig.payload_variant.tak = moduleConfig.tak;
             break;
+        case meshtastic_ModuleConfig_remote_switch_tag:
+            LOG_DEBUG("Send module config: remote switch");
+            fromRadioScratch.moduleConfig.which_payload_variant = meshtastic_ModuleConfig_remote_switch_tag;
+            fromRadioScratch.moduleConfig.payload_variant.remote_switch = moduleConfig.remote_switch;
+            break;
         default:
             LOG_DEBUG("Unhandled module config type %d", config_state);
         }

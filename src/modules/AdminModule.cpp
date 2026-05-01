@@ -664,6 +664,7 @@ void AdminModule::handleSetConfig(const meshtastic_Config &c, bool fromOthers)
     bool isRegionUnset = (config.lora.region == meshtastic_Config_LoRaConfig_RegionCode_UNSET);
     bool requiresReboot = true;
 
+    LOG_INFO("handleSetModuleConfig which_payload_variant=%d remote_switch_tag=%d", (int)c.which_payload_variant, (int)meshtastic_ModuleConfig_remote_switch_tag);
     switch (c.which_payload_variant) {
     case meshtastic_Config_device_tag:
         LOG_INFO("Set config: Device");
@@ -944,6 +945,7 @@ bool AdminModule::handleSetModuleConfig(const meshtastic_ModuleConfig &c)
         disableBluetooth();
     }
 
+    LOG_INFO("handleSetModuleConfig which_payload_variant=%d remote_switch_tag=%d", (int)c.which_payload_variant, (int)meshtastic_ModuleConfig_remote_switch_tag);
     switch (c.which_payload_variant) {
     case meshtastic_ModuleConfig_mqtt_tag:
 #if MESHTASTIC_EXCLUDE_MQTT
@@ -1021,6 +1023,11 @@ bool AdminModule::handleSetModuleConfig(const meshtastic_ModuleConfig &c)
         LOG_INFO("Set module config: Detection Sensor");
         moduleConfig.has_detection_sensor = true;
         moduleConfig.detection_sensor = c.payload_variant.detection_sensor;
+        break;
+    case meshtastic_ModuleConfig_remote_switch_tag:
+        LOG_INFO("Set module config: Remote Switch");
+        moduleConfig.has_remote_switch = true;
+        moduleConfig.remote_switch = c.payload_variant.remote_switch;
         break;
     case meshtastic_ModuleConfig_ambient_lighting_tag:
         LOG_INFO("Set module config: Ambient Lighting");
@@ -1233,6 +1240,11 @@ void AdminModule::handleGetModuleConfig(const meshtastic_MeshPacket &req, const 
             configName = "Traffic Management";
             res.get_module_config_response.which_payload_variant = meshtastic_ModuleConfig_traffic_management_tag;
             res.get_module_config_response.payload_variant.traffic_management = moduleConfig.traffic_management;
+            break;
+        case meshtastic_AdminMessage_ModuleConfigType_REMOTESWITCH_CONFIG:
+            configName = "Remote Switch";
+            res.get_module_config_response.which_payload_variant = meshtastic_ModuleConfig_remote_switch_tag;
+            res.get_module_config_response.payload_variant.remote_switch = moduleConfig.remote_switch;
             break;
         }
         LOG_INFO("Get module config: %s", configName);

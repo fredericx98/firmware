@@ -1205,11 +1205,11 @@ void NodeDB::loadFromDisk()
     spiLock->unlock();
 #endif
 #ifdef FSCom
-#if defined(FACTORY_INSTALL) && !defined(ARCH_PORTDUINO)
+#ifdef FACTORY_INSTALL
     spiLock->lock();
     if (!FSCom.exists("/prefs/" xstr(BUILD_EPOCH))) {
         LOG_WARN("Factory Install Reset!");
-        rmDir("/prefs");
+        FSCom.format();
         FSCom.mkdir("/prefs");
         File f2 = FSCom.open("/prefs/" xstr(BUILD_EPOCH), FILE_O_WRITE);
         if (f2) {
@@ -1576,6 +1576,7 @@ bool NodeDB::saveToDiskNoRetry(int saveWhat)
         moduleConfig.has_audio = true;
         moduleConfig.has_paxcounter = true;
         moduleConfig.has_statusmessage = true;
+        moduleConfig.has_remote_switch = true;
 
         success &=
             saveProto(moduleConfigFileName, meshtastic_LocalModuleConfig_size, &meshtastic_LocalModuleConfig_msg, &moduleConfig);

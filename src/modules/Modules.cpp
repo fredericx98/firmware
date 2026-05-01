@@ -22,6 +22,7 @@
 #if !MESHTASTIC_EXCLUDE_DETECTIONSENSOR
 #include "modules/DetectionSensorModule.h"
 #endif
+#include "modules/RemoteSwitchReceiverModule.h"
 #if !MESHTASTIC_EXCLUDE_NEIGHBORINFO
 #include "modules/NeighborInfoModule.h"
 #endif
@@ -159,6 +160,7 @@ void setupModules()
         detectionSensorModule = new DetectionSensorModule();
     }
 #endif
+    remoteSwitchReceiverModule = new RemoteSwitchReceiverModule();
 #if !MESHTASTIC_EXCLUDE_ATAK
     if (config.device.role == meshtastic_Config_DeviceConfig_Role_TAK ||
         config.device.role == meshtastic_Config_DeviceConfig_Role_TAK_TRACKER) {
